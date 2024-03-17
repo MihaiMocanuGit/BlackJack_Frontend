@@ -10,11 +10,17 @@ function PlayerList()
     const {players, addPlayer, removePlayer} = useContext<PlayersContextType>(DataContext)
 
     return(
-        <ul>
+        <ul style={{listStyleType:"square"}}>
             {players.map((el: Player, index: number) => {
-                return <li key={index}>{el.getUsername()}, {el.getLevel()}, {el.getBank()}
-                <button onClick={() => {removePlayer(el.getUid())}}>Quit</button>
+                return( 
+                <li key={index}>
+                    <p>Username: {el.getUsername()}</p>
+                    <p>Bank: {el.getBank()}</p>
+                    <p>Level:    {el.getLevel()}</p> 
+                    <button onClick={() => {removePlayer(el.getUid())}}>Kick</button>
+                    <button onClick={() => {removePlayer(el.getUid())}}>Modify</button>
                 </li>
+                )
             })}
         </ul>
     );
