@@ -7,19 +7,23 @@ import { useContext } from 'react'
 
 function PlayerList()
 {
-    const {players, addPlayer, removePlayer} = useContext<PlayersContextType>(DataContext)
+    const {players, addPlayer, removePlayer, modifyPlayer} = useContext<PlayersContextType>(DataContext)
 
     return(
-        <ul style={{listStyleType:"square"}}>
+        <ul style={{listStyleType:"square", maxWidth: "350px", overflowWrap: "break-word"}}>
             {players.map((el: Player, index: number) => {
-                return( 
+                return( <>
+               
                 <li key={index}>
                     <p>Username: {el.getUsername()}</p>
                     <p>Bank: {el.getBank()}</p>
                     <p>Level:    {el.getLevel()}</p> 
-                    <button onClick={() => {removePlayer(el.getUid())}}>Kick</button>
-                    <button onClick={() => {removePlayer(el.getUid())}}>Modify</button>
                 </li>
+                <div style={{display: 'grid', justifyContent:'flex-end'}}>
+                <button onClick={() => {removePlayer(el.getUid())}}>Kick</button>
+                <button onClick={() => {modifyPlayer(el.getUid())}}>Modify</button>
+                </div>
+                </>
                 )
             })}
         </ul>
