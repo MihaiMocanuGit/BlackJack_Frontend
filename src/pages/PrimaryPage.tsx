@@ -1,18 +1,22 @@
 
-import { useState, createContext, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate} from "react-router-dom";
-import { Player } from '../models/Player';
+import { createContext, useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import PlayerList from '../PlayerList';
+import { Player } from '../models/Player';
 
 import { DataContext } from '../App';
+import { basicAdd } from '../CrudOperations';
+import { basicRemove } from '../CrudOperations';
+import { basicModify } from '../CrudOperations';
+
+
 
 export type PlayersContextType = {
 
     players: Player[];
-    addPlayer: (username: string, bank:number, level:number) => void;
-    removePlayer: (playerUid: number) => void;
-    modifyPlayer: (playerUid: number, username: string, bank:number, level:number) => void;
+    addPlayer: (data: Player[], username: string, bank:number, level:number) => void;
+    removePlayer: (data: Player[], playerUid: number) => void;
+    modifyPlayer: (data: Player[], playerUid: number, username: string, bank:number, level:number) => void;
 };
 
 export let PlayersContext = createContext<PlayersContextType>({
@@ -21,8 +25,6 @@ export let PlayersContext = createContext<PlayersContextType>({
     removePlayer: () => {},
     modifyPlayer: () => {}
 });
-
-
 export function PrimaryPage()
 {
     document.title = 'Primary';
@@ -31,46 +33,50 @@ export function PrimaryPage()
 
 
     const addPlayer = (username: string, bank:number, level:number) => {
-        let validUid = players.length;
+        // let validUid = players.length;
 
-        for (let index = 0; index < players.length; index++) {
-            const element = players[index];
+        // for (let index = 0; index < players.length; index++) {
+        //     const element = players[index];
 
-            if (element.getUid() > validUid ) 
-                validUid = element.getUid()            
-        }
-        console.log( 'BEFORE' + players);
-        const newPlayer = new Player(validUid, username, bank, level);
-        const result = players.map((x: Player) =>x);
-        result.push(newPlayer);
-        updatePlayers(result);
-        console.log( 'AFTER' + result);
+        //     if (element.getUid() > validUid ) 
+        //         validUid = element.getUid()            
+        // }
+        // console.log( 'BEFORE' + players);
+        // const newPlayer = new Player(validUid, username, bank, level);
+        // const result = players.map((x: Player) =>x);
+        // result.push(newPlayer);
+        // updatePlayers(result);
+        updatePlayers(basicAdd(players, username, bank, level));
+        // console.log( 'AFTER' + result);
 
     };
 
     const removePlayer = (playerUid: number) => {
-        updatePlayers((prevState: Player[]) => prevState.filter((player) => player.getUid() !== playerUid));
+        // updatePlayers((prevState: Player[]) => prevState.filter((player) => player.getUid() !== playerUid));
+        updatePlayers(basicRemove(players, playerUid));
     };
     
     const modifyPlayer = (playerUid: number, username: string, bank:number, level:number) =>
     {
 
-        for (let index = 0; index < players.length; index++) {
-            const element = players[index];
+        // for (let index = 0; index < players.length; index++) {
+        //     const element = players[index];
 
-            if (element.getUid() === playerUid) 
-            {
+        //     if (element.getUid() === playerUid) 
+        //     {
 
-                if (username != "")
-                {
-                    element.setBank(bank);
-                    element.setLevel(level);
-                    element.setUsername(username);
-                }
+        //         if (username != "")
+        //         {
+        //             element.setBank(bank);
+        //             element.setLevel(level);
+        //             element.setUsername(username);
+        //         }
 
-            }
-        }
-        updatePlayers((prevState: Player[]) => prevState.filter((player) => true));
+        //     }
+        // }
+        // updatePlayers((prevState: Player[]) => prevState.filter((player) => true));
+
+        updatePlayers(basicModify(players, playerUid, username, bank, level));
 
     }
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
