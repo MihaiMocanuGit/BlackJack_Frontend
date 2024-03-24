@@ -1,0 +1,10 @@
+{
+    "editor.codeActionsOnSave": {
+        //"source.organizeImports": "always",
+        "source.fixAll.eslint": "always",
+        "source.fixAll.prettier": "always"
+    },
+    "files.autoSave": "onFocusChange",
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
