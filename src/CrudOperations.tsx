@@ -9,8 +9,8 @@ export function basicAdd(data: Player[], username: string, bank: number, level: 
     for (let index = 0; index < data.length; index++) {
         const element = data[index];
 
-        if (element.getUid() > validUid)
-            validUid = element.getUid();
+        if (element.getUid() >= validUid)
+            validUid = element.getUid() + 1;
     }
 
     const newPlayer = new Player(validUid, username, bank, level);
