@@ -8,11 +8,11 @@ import { Player } from '../models/Player';
 
 export function AddPlayerPage()
 {
-    let {addPlayer} = useContext<PlayersContextType>(PlayersContext)
+    const {addPlayer} = useContext<PlayersContextType>(PlayersContext)
 
-    let [inputUsername, updateUsernameInput] = useState<string>("");
-    let [inputBank, updateBankInput] = useState<number>(0);
-    let [inputLevel, updateLevelInput] = useState<number>(0);
+    const [inputUsername, updateUsernameInput] = useState<string>("");
+    const [inputBank, updateBankInput] = useState<number>(0);
+    const [inputLevel, updateLevelInput] = useState<number>(0);
 
     const addFinalPlayer = (username: string, bank:number, level:number) => {
         addPlayer(username, bank, level);
@@ -21,9 +21,14 @@ export function AddPlayerPage()
         updateLevelInput(0);
         updateBankInput(0);
     };
-
+    const navigate = useNavigate(); 
     return (
-        <div>
+        <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "60%", maxHeight: "50%"}} className="App">
+                <div className='header'>
+                        <p>
+                            Join
+                        </p>
+                </div>
                 <p><label htmlFor="usernameInput">Username: </label>
                 <input  id="usernameInput" style={{textAlign:'right'}} value={inputUsername} onChange={(field) => {
                     updateUsernameInput(field.target.value);
@@ -53,7 +58,7 @@ export function AddPlayerPage()
                     if(inputUsername !== "") 
                     {
                         addFinalPlayer(inputUsername, inputBank, inputLevel);
-                        //navigate("/");
+                        navigate("/");
                     }}}>       
                     Join:
                 </button>

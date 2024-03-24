@@ -1,29 +1,26 @@
 import React from 'react'
 import { useNavigate} from "react-router-dom";
-import { useContext, createContext } from 'react'
+import { Context, useContext, createContext } from 'react'
 import { Link } from 'react-router-dom';
 
 import { Player } from './models/Player'
 import { PlayersContext } from './pages/PrimaryPage'
 import { PlayersContextType } from './pages/PrimaryPage'
 
-export type PlayerContextType = {
 
-    player: Player | null;
-};
-export let PlayerContext = createContext<PlayerContextType>({
-    player: null
-})
+export let PlayerContext : React.Context<{
+    player: Player
+}>;
 function PlayerList()
 {   
 
     const navigate = useNavigate(); 
     const {players, addPlayer, removePlayer, modifyPlayer} = useContext<PlayersContextType>(PlayersContext)
     const viewOnClick = (player: Player) => {
-        PlayerContext = createContext<PlayerContextType>({player});
+        PlayerContext = createContext({player});
         navigate("/ViewPlayerPage");
     }
-    //<button onClick={() => {modifyPlayer(el.getUid())}}>Modify</button>
+    //
     
     return(
         <ul style={{listStyleType:"square", maxWidth: "350px", overflowWrap: "break-word"}}>

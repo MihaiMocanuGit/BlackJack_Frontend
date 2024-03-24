@@ -1,13 +1,11 @@
 
-import { useState, createContext } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate} from "react-router-dom";
 import { Player } from '../models/Player';
 import PlayerList from '../PlayerList';
 
-const player1: Player = new Player(1, 'I_HATE_THIS', 100, 1);
-const player2: Player = new Player(2, 'ME_TOO', 420, 2);
-const player3: Player = new Player(3, 'IDK_ANYMORE', 69, 0);
+import { DataContext } from '../App';
 
 export type PlayersContextType = {
 
@@ -29,7 +27,7 @@ export function PrimaryPage()
 {
     document.title = 'Primary';
 
-    const [players, updatePlayers] = useState<Player[]>([player1, player2, player3]);
+    const {players, updatePlayers} = useContext(DataContext);
 
 
     const addPlayer = (username: string, bank:number, level:number) => {
@@ -43,8 +41,10 @@ export function PrimaryPage()
         }
         console.log( 'BEFORE' + players);
         const newPlayer = new Player(validUid, username, bank, level);
-        updatePlayers((prevState: Player[]) => [...prevState, newPlayer]);
-        console.log( 'AFTER' + players);
+        const result = players.map((x: Player) =>x);
+        result.push(newPlayer);
+        updatePlayers(result);
+        console.log( 'AFTER' + result);
 
     };
 
@@ -73,21 +73,25 @@ export function PrimaryPage()
         updatePlayers((prevState: Player[]) => prevState.filter((player) => true));
 
     }
+    PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
 
     const navigate = useNavigate(); 
     const joinOnClick = () => {
-        PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
+
         navigate("/AddPlayerPage");
     }
 
     return (
         <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "60%", maxHeight: "50%"}} className="App">
-                <div>
-                    <button onClick={() => {
-                        joinOnClick()}}>
-                        Join:
-                    </button>
-                </div>
+            <div className='header'>
+                    <p>
+                        Home
+                    </p>
+            </div>
+                <button style={{position: 'relative', alignSelf: 'self-end'}} onClick={() => {
+                    joinOnClick()}}>
+                    Join:
+                </button>
             <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}}>
                 <PlayerList />
             </PlayersContext.Provider>
