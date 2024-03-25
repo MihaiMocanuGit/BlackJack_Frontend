@@ -14,9 +14,9 @@ import { basicModify } from '../CrudOperations';
 export type PlayersContextType = {
 
     players: Player[];
-    addPlayer: (data: Player[], username: string, bank:number, level:number) => void;
-    removePlayer: (data: Player[], playerUid: number) => void;
-    modifyPlayer: (data: Player[], playerUid: number, username: string, bank:number, level:number) => void;
+    addPlayer: (username: string, bank:number, level:number) => void;
+    removePlayer: (playerUid: number) => void;
+    modifyPlayer: (playerUid: number, username: string, bank:number, level:number) => void;
 };
 
 export let PlayersContext = createContext<PlayersContextType>({
@@ -25,59 +25,51 @@ export let PlayersContext = createContext<PlayersContextType>({
     removePlayer: () => {},
     modifyPlayer: () => {}
 });
+
+
+let sortAscending = true;
 export function PrimaryPage()
 {
     document.title = 'Primary';
 
     const {players, updatePlayers} = useContext(DataContext);
+    const [sortAscending, updateSortAscending] = useState<boolean>(true);
 
 
     const addPlayer = (username: string, bank:number, level:number) => {
-        // let validUid = players.length;
 
-        // for (let index = 0; index < players.length; index++) {
-        //     const element = players[index];
-
-        //     if (element.getUid() > validUid ) 
-        //         validUid = element.getUid()            
-        // }
-        // console.log( 'BEFORE' + players);
-        // const newPlayer = new Player(validUid, username, bank, level);
-        // const result = players.map((x: Player) =>x);
-        // result.push(newPlayer);
-        // updatePlayers(result);
         updatePlayers(basicAdd(players, username, bank, level));
-        // console.log( 'AFTER' + result);
-
     };
 
     const removePlayer = (playerUid: number) => {
-        // updatePlayers((prevState: Player[]) => prevState.filter((player) => player.getUid() !== playerUid));
         updatePlayers(basicRemove(players, playerUid));
     };
     
     const modifyPlayer = (playerUid: number, username: string, bank:number, level:number) =>
     {
-
-        // for (let index = 0; index < players.length; index++) {
-        //     const element = players[index];
-
-        //     if (element.getUid() === playerUid) 
-        //     {
-
-        //         if (username != "")
-        //         {
-        //             element.setBank(bank);
-        //             element.setLevel(level);
-        //             element.setUsername(username);
-        //         }
-
-        //     }
-        // }
-        // updatePlayers((prevState: Player[]) => prevState.filter((player) => true));
-
         updatePlayers(basicModify(players, playerUid, username, bank, level));
 
+    }
+
+
+    const sortOnClick = () => {
+        console.log("Ascending " + sortAscending);
+        console.log("Before:")
+        let copy = [...players];
+        copy.forEach((player: Player) => console.log(player.getLevel()));
+        if(sortAscending === true)
+        {
+            copy.sort((n1,n2) => n1.getLevel() - n2.getLevel());  
+            updateSortAscending(false);
+        }
+        else
+        {
+            copy.sort((n1,n2) => n2.getLevel() - n1.getLevel());
+            updateSortAscending(true);
+        }
+        updatePlayers(copy);
+        console.log("After:")
+        copy.forEach((player: Player) => console.log(player.getLevel()));
     }
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
 
@@ -98,6 +90,7 @@ export function PrimaryPage()
                     joinOnClick()}}>
                     Join:
                 </button>
+                <button onClick={() => {sortOnClick()}}> Sort By Level</button>
             <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}}>
                 <PlayerList />
             </PlayersContext.Provider>
