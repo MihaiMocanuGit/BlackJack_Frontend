@@ -93,6 +93,7 @@ export function PrimaryPage()
                 <button onClick={() => {sortOnClick()}}> Sort By Level</button>
             <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}}>
                 <PlayerList />
+                
             </PlayersContext.Provider>
         </div>
     )
