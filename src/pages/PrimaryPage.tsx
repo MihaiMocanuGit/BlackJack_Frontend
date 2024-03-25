@@ -60,13 +60,13 @@ export function PrimaryPage()
         if(sortAscending === true)
         {
             copy.sort((n1,n2) => n1.getLevel() - n2.getLevel());  
-            updateSortAscending(false);
         }
         else
         {
             copy.sort((n1,n2) => n2.getLevel() - n1.getLevel());
-            updateSortAscending(true);
+            
         }
+        updateSortAscending(!sortAscending);
         updatePlayers(copy);
         console.log("After:")
         copy.forEach((player: Player) => console.log(player.getLevel()));

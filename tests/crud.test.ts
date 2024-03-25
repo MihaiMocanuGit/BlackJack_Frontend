@@ -20,6 +20,28 @@ function addData()
     return players;
 }
 
+test("Test Player init", () => {
+    let player = new Player(1, "test", 100, 1);
+
+    expect(player.getBank()).toBe(100);
+    expect(player.getLevel()).toBe(1);
+    expect(player.getUsername()).toBe("test");
+    expect(player.getUid()).toBe(1);
+
+
+    player.setBank(200);
+    player.setLevel(2);
+    player.setUid(2);
+    player.setUsername("test2");
+
+
+
+    expect(player.getBank()).toBe(200);
+    expect(player.getLevel()).toBe(2);
+    expect(player.getUsername()).toBe("test2");
+    expect(player.getUid()).toBe(2);
+    
+})
 
 test('Test loading the data', () => {
     const players = addData();
