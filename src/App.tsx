@@ -8,12 +8,7 @@ import  React, {Context, createContext, useState} from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Player } from './models/Player';
 
-const player1: Player = new Player(1, 'I_HATE_THIS', 100, 1);
-const player2: Player = new Player(2, 'ME_TOO', 420, 2);
-const player3: Player = new Player(3, 'IDK_ANYMORE', 69, 0);
 
-const player4: Player = new Player(4, 'Yeah', 123, 1);
-const player5: Player = new Player(5, 'NO', 32, 2);
 
 export let DataContext: React.Context<{
     players: Player[];
@@ -22,7 +17,13 @@ export let DataContext: React.Context<{
 function App() {
     
 
-    const [players, updatePlayers] = useState<Player[]>([player1, player2, player3, player4, player5]);
+    const [players, updatePlayers] = useState<Player[]>([new Player(1, 'I_HATE_THIS', 100, 1), new Player(2, 'ME_TOO', 420, 2),
+                                                         new Player(3, 'IDK_ANYMORE', 69, 0), new Player(4, 'Yeah', 123, 1),
+                                                         new Player(5, 'HOW', 50, 2), new Player(6, 'Maybe', 70, 2), 
+                                                         new Player(7, 'COME', 143, 4), new Player(8, 'TRY', 200, 6),
+                                                         new Player(9, 'IDK_ANYMORE', 269, 7), new Player(10, 'Yeah', 123, 1),
+                                                         new Player(11, 'PAUSE', 32, 2), new Player(12, 'RANDOM', 200, 3), 
+                                                         new Player(13, 'WORDS', 196, 4), new Player(14, 'NO', 432, 9) ]);
     DataContext = createContext({players,updatePlayers});
     
     return (

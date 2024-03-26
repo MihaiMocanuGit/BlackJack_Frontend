@@ -51,8 +51,6 @@ export function PrimaryPage()
 
 
     const sortOnClick = () => {
-        console.log("Ascending " + sortAscending);
-        console.log("Before:")
         const copy = [...players];
         copy.forEach((player: Player) => console.log(player.getLevel()));
         if(sortAscending === true)
@@ -66,7 +64,6 @@ export function PrimaryPage()
         }
         updateSortAscending(!sortAscending);
         updatePlayers(copy);
-        console.log("After:")
         copy.forEach((player: Player) => console.log(player.getLevel()));
     }
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
@@ -78,7 +75,7 @@ export function PrimaryPage()
     }
 
     return (
-        <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "90%"}} className="App">
+        <div style={{backgroundColor:"cyan", padding: "1rem", width: "95%"}} className="App">
             <div className='header'>
                     <p>
                         Home
@@ -88,14 +85,15 @@ export function PrimaryPage()
                 <button onClick={() => {joinOnClick()}}>
                     Join:
                 </button>
-                <button onClick={() => {sortOnClick()}}> Sort By Level</button>
+                <button style={{marginLeft: "250px"}} onClick={() => {sortOnClick()}}> Sort By Level</button>
             </div>
             <div style={{display: 'flex', justifyContent:'stretch'}}>
                 <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}} >
-                        <PlayerList />
+                        <PlayerList />                      
                         <ChartsOverviewDemo />
                 </PlayersContext.Provider>
             </div>
+            
         </div>
     )
 }
