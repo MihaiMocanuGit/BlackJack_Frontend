@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './ViewPlayerPage.css';
 import { Player } from '../models/Player';
 
-import { PlayerContext} from '../PlayerList'
+import { PlayerContext} from '../components/PlayerList'
 import { PlayersContext, PlayersContextType } from './PrimaryPage';
 
 
@@ -15,7 +15,7 @@ export function ViewPlayerPage()
     const [inputLevel, updateLevelInput] = useState<number>(0);
     
     const {player} = useContext(PlayerContext);
-    const {players, modifyPlayer} = useContext<PlayersContextType>(PlayersContext);
+    const {modifyPlayer} = useContext<PlayersContextType>(PlayersContext);
     const navigate = useNavigate(); 
     return(
         <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "60%", maxHeight: "50%"}} className="App">           

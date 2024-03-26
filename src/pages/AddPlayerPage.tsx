@@ -1,10 +1,8 @@
-import React from 'react'
-import { useContext, createContext } from 'react'
+import { useContext } from 'react'
 import { useState } from 'react';
 import { useNavigate} from "react-router-dom";
 import { PlayersContext } from './PrimaryPage'
 import { PlayersContextType } from './PrimaryPage'
-import { Player } from '../models/Player';
 
 export function AddPlayerPage()
 {

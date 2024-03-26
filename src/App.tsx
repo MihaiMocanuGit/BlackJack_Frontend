@@ -12,6 +12,9 @@ const player1: Player = new Player(1, 'I_HATE_THIS', 100, 1);
 const player2: Player = new Player(2, 'ME_TOO', 420, 2);
 const player3: Player = new Player(3, 'IDK_ANYMORE', 69, 0);
 
+const player4: Player = new Player(4, 'Yeah', 123, 1);
+const player5: Player = new Player(5, 'NO', 32, 2);
+
 export let DataContext: React.Context<{
     players: Player[];
     updatePlayers: React.Dispatch<React.SetStateAction<Player[]>>;
@@ -19,7 +22,7 @@ export let DataContext: React.Context<{
 function App() {
     
 
-    const [players, updatePlayers] = useState<Player[]>([player1, player2, player3]);
+    const [players, updatePlayers] = useState<Player[]>([player1, player2, player3, player4, player5]);
     DataContext = createContext({players,updatePlayers});
     
     return (

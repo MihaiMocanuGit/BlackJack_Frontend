@@ -1,14 +1,12 @@
 
 import { createContext, useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import PlayerList from '../PlayerList';
+import { useNavigate } from 'react-router-dom';
+import PlayerList from '../components/PlayerList';
+import { ChartsOverviewDemo } from '../components/Graphs';
 import { Player } from '../models/Player';
 
 import { DataContext } from '../App';
-import { basicAdd } from '../CrudOperations';
-import { basicRemove } from '../CrudOperations';
-import { basicModify } from '../CrudOperations';
-
+import { basicAdd, basicRemove, basicModify } from '../CrudOperations';
 
 
 export type PlayersContextType = {
@@ -27,7 +25,7 @@ export let PlayersContext = createContext<PlayersContextType>({
 });
 
 
-let sortAscending = true;
+
 export function PrimaryPage()
 {
     document.title = 'Primary';
@@ -55,7 +53,7 @@ export function PrimaryPage()
     const sortOnClick = () => {
         console.log("Ascending " + sortAscending);
         console.log("Before:")
-        let copy = [...players];
+        const copy = [...players];
         copy.forEach((player: Player) => console.log(player.getLevel()));
         if(sortAscending === true)
         {
@@ -80,21 +78,24 @@ export function PrimaryPage()
     }
 
     return (
-        <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "60%", maxHeight: "50%"}} className="App">
+        <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "90%"}} className="App">
             <div className='header'>
                     <p>
                         Home
                     </p>
             </div>
-                <button style={{position: 'relative', alignSelf: 'self-end'}} onClick={() => {
-                    joinOnClick()}}>
+            <div>
+                <button onClick={() => {joinOnClick()}}>
                     Join:
                 </button>
                 <button onClick={() => {sortOnClick()}}> Sort By Level</button>
-            <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}}>
-                <PlayerList />
-                
-            </PlayersContext.Provider>
+            </div>
+            <div style={{display: 'flex', justifyContent:'stretch'}}>
+                <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}} >
+                        <PlayerList />
+                        <ChartsOverviewDemo />
+                </PlayersContext.Provider>
+            </div>
         </div>
     )
 }
