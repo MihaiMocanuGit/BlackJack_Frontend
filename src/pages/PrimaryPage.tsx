@@ -5,7 +5,7 @@ import PlayerList from '../components/PlayerList';
 import { Player } from '../models/Player';
 
 import { DataContext } from '../App';
-import { basicAdd, basicRemove, basicModify } from '../CrudOperations';
+import { basicAdd, basicRemove, basicModify } from '../utils/CrudOperations';
 
 
 export type PlayersContextType = {
