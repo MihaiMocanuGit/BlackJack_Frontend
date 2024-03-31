@@ -1,8 +1,6 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import './ViewPlayerPage.css';
-import { Player } from '../models/Player';
 
 import { PlayerContext} from '../components/PlayerList'
 import { PlayersContext, PlayersContextType } from './PrimaryPage';
