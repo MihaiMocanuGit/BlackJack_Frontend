@@ -58,18 +58,30 @@ export async function getPlayer(uid: number)
     return player;
 }
 
-// function getAndSort(reverse: string)
-// {
-//     get(address + '/players/' + reverse)
-//     .then(function (response: any) {
-//         // handle success
-//         console.log(response);
-//     })
-//     .catch(function (error: any) {
-//         // handle error
-//         console.log(error);
-//     })
-//     .finally(function () {
-//         // always executed
-//     });
-// }
+export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
+{
+    const {data} = await axios.get(address + '/players/sort/' + reverse);
+    console.log("Data:");
+    console.log(data);
+    const playerList = convertServerListToLocalList(data);
+    console.log("Converted Data:");
+    console.log(playerList);
+
+    if (updatePlayerState != null)
+        updatePlayerState(playerList);
+    return playerList;
+    
+}
+
+export async function getSize() : Promise<number>
+{
+    const {data} = await axios.get(address + '/players/size');
+    console.log("Data:");
+    console.log(data);
+    const size: number = data;
+    console.log("Converted Data:");
+    console.log(size);
+
+    return size;
+    
+}

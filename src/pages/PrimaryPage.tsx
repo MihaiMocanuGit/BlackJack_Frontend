@@ -25,7 +25,9 @@ export let PlayersContext = createContext<PlayersContextType>({
     modifyPlayer: () => {}
 });
 
-
+function getMaxPage(pageSize: number) {
+    return 3;
+}
 
 export function PrimaryPage()
 {
@@ -34,7 +36,8 @@ export function PrimaryPage()
     const {players, updatePlayers} = useContext(DataContext);
     const [sortAscending, updateSortAscending] = useState<boolean>(true);
 
-    const {pageNo, updatePageNo, pageSize, updatePageSize} = useContext(PageContext);
+    const {pageNo, updatePageNo, pageSize} = useContext(PageContext);
+
 
     const addPlayer = (username: string, bank:number, level:number) => {
 
@@ -53,20 +56,9 @@ export function PrimaryPage()
 
 
     const sortOnClick = () => {
-        const copy = [...players];
-        copy.forEach((player: Player) => console.log(player.getLevel()));
-        if(sortAscending === true)
-        {
-            copy.sort((n1,n2) => n1.getLevel() - n2.getLevel());  
-        }
-        else
-        {
-            copy.sort((n1,n2) => n2.getLevel() - n1.getLevel());
-            
-        }
+        api.getAndSort(null, sortAscending);
+        api.getPage(updatePlayers, pageNo, pageSize);
         updateSortAscending(!sortAscending);
-        updatePlayers(copy);
-        copy.forEach((player: Player) => console.log(player.getLevel()));
     }
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
 
@@ -75,6 +67,8 @@ export function PrimaryPage()
 
         navigate("/AddPlayerPage");
     }
+
+  
 
     return (
         <div style={{backgroundColor:"cyan", padding: "1rem", width: "100%"}} className="App">
@@ -87,6 +81,9 @@ export function PrimaryPage()
                 <button onClick={() => {joinOnClick()}}>
                     Join:
                 </button>
+                <button style={{marginLeft: "50px"}} onClick={() => {updatePageNo((pageNo <= 0)? 0 : pageNo - 1)}}> &lt; </button>
+                <>{pageNo} / {getMaxPage(pageSize)}</>
+                <button style={{marginLeft: "25px"}} onClick={() => {updatePageNo((pageNo >= getMaxPage(pageSize))? getMaxPage(pageSize) : pageNo + 1)}}> &gt; </button>
                 <button style={{marginLeft: "250px"}} onClick={() => {sortOnClick()}}> Sort By Level</button>
                 <button style={{marginLeft: "25px"}} onClick={() => {navigate("/GraphsPage")}}> Checkout graphs</button>
             </div>

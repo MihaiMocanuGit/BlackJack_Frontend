@@ -35,12 +35,15 @@ function App() {
     
     const [pageNo, updatePageNo] = useState<number>(0);
     const [pageSize, updatePageSize] = useState<number>(8);
-    
+    PageContext = createContext({pageNo,updatePageNo, pageSize, updatePageSize});
+
     useEffect(() => {
         console.log("Loading players...")
         const load = () => api.getPage(updatePlayers, pageNo, pageSize);
         load();
-      }, [])
+      }, [pageNo, pageSize])
+
+
     return (
         <BrowserRouter>
            <Routes>
