@@ -4,12 +4,11 @@ import { PrimaryPage } from './pages/PrimaryPage';
 import { ViewPlayerPage } from './pages/ViewPlayerPage';
 import { AddPlayerPage } from './pages/AddPlayerPage';
 
-import  React, { createContext, useState} from 'react'
+import  React, { createContext, useEffect, useState} from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Player } from './models/Player';
 import { GraphsPage } from './pages/GraphsPage';
-
-
+import * as api from './service/backendApi';
 
 export let DataContext: React.Context<{
     players: Player[];
@@ -27,6 +26,11 @@ function App() {
                                                          new Player(13, 'WORDS', 196, 4), new Player(14, 'NO', 432, 9) ]);
     DataContext = createContext({players,updatePlayers});
     
+    useEffect(() => {
+        console.log("Loading players...")
+        const load = () => api.getAll(updatePlayers);
+        load();
+      }, [])
     return (
         <BrowserRouter>
            <Routes>
