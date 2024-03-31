@@ -14,6 +14,13 @@ export let DataContext: React.Context<{
     players: Player[];
     updatePlayers: React.Dispatch<React.SetStateAction<Player[]>>;
 }>;
+
+export let PageContext: React.Context<{
+    pageNo: number;
+    updatePageNo: React.Dispatch<React.SetStateAction<number>>;
+    pageSize: number;
+    updatePageSize: React.Dispatch<React.SetStateAction<number>>;
+}>;
 function App() {
     
 
@@ -26,9 +33,12 @@ function App() {
                                                          new Player(13, 'WORDS', 196, 4), new Player(14, 'NO', 432, 9) ]);
     DataContext = createContext({players,updatePlayers});
     
+    const [pageNo, updatePageNo] = useState<number>(0);
+    const [pageSize, updatePageSize] = useState<number>(8);
+    
     useEffect(() => {
         console.log("Loading players...")
-        const load = () => api.getAll(updatePlayers);
+        const load = () => api.getPage(updatePlayers, pageNo, pageSize);
         load();
       }, [])
     return (

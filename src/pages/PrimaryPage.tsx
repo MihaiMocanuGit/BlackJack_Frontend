@@ -5,7 +5,9 @@ import PlayerList from '../components/PlayerList';
 import { Player } from '../models/Player';
 
 import { DataContext } from '../App';
+import { PageContext } from '../App';
 import { basicAdd, basicRemove, basicModify } from '../utils/CrudOperations';
+import * as api from '../service/backendApi'
 
 
 export type PlayersContextType = {
@@ -32,6 +34,7 @@ export function PrimaryPage()
     const {players, updatePlayers} = useContext(DataContext);
     const [sortAscending, updateSortAscending] = useState<boolean>(true);
 
+    const {pageNo, updatePageNo, pageSize, updatePageSize} = useContext(PageContext);
 
     const addPlayer = (username: string, bank:number, level:number) => {
 

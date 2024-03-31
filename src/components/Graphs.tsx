@@ -9,14 +9,14 @@ export function BarGraph() {
     const levels = new Set<number>();
     const avgBank: number[] = []
     const levelsArr: number[] = [];
-    players.forEach((x) => levels.add(x.getLevel()));
+    players.forEach((x) => levels.add(Math.floor(x.getLevel())));
 
     for (const level of levels) {
         let sum: number = 0;
         let count: number = 0;
 
         players.forEach((player) => {
-            if (player.getLevel() === level)
+            if (Math.floor(player.getLevel()) === level)
             {
                 sum += player.getBank();
                 count += 1;
