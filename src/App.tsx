@@ -4,9 +4,10 @@ import { PrimaryPage } from './pages/PrimaryPage';
 import { ViewPlayerPage } from './pages/ViewPlayerPage';
 import { AddPlayerPage } from './pages/AddPlayerPage';
 
-import  React, {Context, createContext, useState} from 'react'
+import  React, { createContext, useState} from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Player } from './models/Player';
+import { GraphsPage } from './pages/GraphsPage';
 
 
 
@@ -32,6 +33,7 @@ function App() {
                <Route path='/' element={<PrimaryPage />} />
                <Route path='/ViewPlayerPage' element={<ViewPlayerPage />} />
                <Route path='/AddPlayerPage' element={<AddPlayerPage />} />
+               <Route path='/GraphsPage' element={<GraphsPage />} />
            </Routes>
         </BrowserRouter>
     );

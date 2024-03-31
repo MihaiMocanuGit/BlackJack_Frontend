@@ -2,7 +2,6 @@
 import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayerList from '../components/PlayerList';
-import { ChartsOverviewDemo } from '../components/Graphs';
 import { Player } from '../models/Player';
 
 import { DataContext } from '../App';
@@ -75,7 +74,7 @@ export function PrimaryPage()
     }
 
     return (
-        <div style={{backgroundColor:"cyan", padding: "1rem", width: "95%"}} className="App">
+        <div style={{backgroundColor:"cyan", padding: "1rem", width: "100%"}} className="App">
             <div className='header'>
                     <p>
                         Home
@@ -86,11 +85,11 @@ export function PrimaryPage()
                     Join:
                 </button>
                 <button style={{marginLeft: "250px"}} onClick={() => {sortOnClick()}}> Sort By Level</button>
+                <button style={{marginLeft: "25px"}} onClick={() => {navigate("/GraphsPage")}}> Checkout graphs</button>
             </div>
             <div style={{display: 'flex', justifyContent:'stretch'}}>
                 <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}} >
                         <PlayerList />                      
-                        <ChartsOverviewDemo />
                 </PlayersContext.Provider>
             </div>
             

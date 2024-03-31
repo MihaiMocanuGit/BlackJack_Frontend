@@ -2,11 +2,9 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import { PlayersContext, PlayersContextType } from '../pages/PrimaryPage';
 import { useContext } from 'react';
-import { Player } from '../models/Player';
 
 
-
-export function ChartsOverviewDemo() {
+export function BarGraph() {
     const {players} = useContext<PlayersContextType>(PlayersContext);
     const levels = new Set<number>();
     const avgBank: number[] = []
@@ -33,9 +31,9 @@ export function ChartsOverviewDemo() {
     return(
         <BarChart
         series={ [{data: avgBank}] }
-        height={290}
-        xAxis={[{ data: levelsArr, scaleType: 'band' }]}
-        margin={{ top: 40, bottom: 30, left: 150, right: 10 }}
+        height={390}
+        xAxis={[{label: 'Average bank per level', data: levelsArr, scaleType: 'band' }]}
+        margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
         />
   );
 }
