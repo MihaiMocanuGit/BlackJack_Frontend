@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate} from "react-router-dom";
 import {useContext, createContext } from 'react'
-import { Link } from 'react-router-dom';
 
 import { Player } from '../models/Player'
 import { PlayersContext } from '../pages/PrimaryPage'
