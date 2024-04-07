@@ -20,6 +20,8 @@ export let PageContext: React.Context<{
     updatePageNo: React.Dispatch<React.SetStateAction<number>>;
     pageSize: number;
     updatePageSize: React.Dispatch<React.SetStateAction<number>>;
+    sizeList: number;
+    updateSizeList: React.Dispatch<React.SetStateAction<number>>;
 }>;
 function App() {
     
@@ -35,7 +37,8 @@ function App() {
     
     const [pageNo, updatePageNo] = useState<number>(0);
     const [pageSize, updatePageSize] = useState<number>(8);
-    PageContext = createContext({pageNo,updatePageNo, pageSize, updatePageSize});
+    const [sizeList, updateSizeList] = useState<number>(0);
+    PageContext = createContext({pageNo,updatePageNo, pageSize, updatePageSize, sizeList, updateSizeList});
 
     useEffect(() => {
         console.log("Loading players...")

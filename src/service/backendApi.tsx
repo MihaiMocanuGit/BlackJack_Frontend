@@ -73,7 +73,7 @@ export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStat
     
 }
 
-export async function getSize() : Promise<number>
+export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
 {
     const {data} = await axios.get(address + '/players/size');
     console.log("Data:");
@@ -81,6 +81,8 @@ export async function getSize() : Promise<number>
     const size: number = data;
     console.log("Converted Data:");
     console.log(size);
+
+    updatePlayersSizeState(size);
 
     return size;
     
