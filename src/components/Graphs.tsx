@@ -1,14 +1,16 @@
 
 import { BarChart } from '@mui/x-charts/BarChart';
-import { PlayersContext, PlayersContextType } from '../pages/PrimaryPage';
-import { useContext } from 'react';
+import * as api from '../service/backendApi'
+import { Player } from '../models/Player';
 
-
-export function BarGraph() {
-    const {players} = useContext<PlayersContextType>(PlayersContext);
+let result: any;
+function onFullfiled(players: Player[])
+{
+    console.log("ACCEPTED: " + players);
     const levels = new Set<number>();
     const avgBank: number[] = []
     const levelsArr: number[] = [];
+
     players.forEach((x) => levels.add(Math.floor(x.getLevel())));
 
     for (const level of levels) {
@@ -27,13 +29,27 @@ export function BarGraph() {
         avgBank.push(avg);
         levelsArr.push(level);
     }
-    
-    return(
-        <BarChart
-        series={ [{data: avgBank}] }
-        height={390}
-        xAxis={[{label: 'Average bank per level', data: levelsArr, scaleType: 'band' }]}
-        margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
-        />
-  );
+    result = <BarChart
+            series={ [{data: avgBank}] }
+            height={390}
+            xAxis={[{label: 'Average bank per level', data: levelsArr, scaleType: 'band' }]}
+            margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
+            />
+}
+function onRejected()
+{
+    console.log("REJECTECTEDDDDD");
+    result = 
+            <BarChart
+                series={ [{}] }
+                height={390}
+                xAxis={[{label: 'Average bank per level', scaleType: 'band' }]}
+                margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
+                />
+}
+export function BarGraph() {
+    const response = api.getAll(null);
+    response.then(onFullfiled, onRejected);
+    return result;
+
 }

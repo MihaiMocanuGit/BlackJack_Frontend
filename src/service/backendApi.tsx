@@ -3,7 +3,10 @@ import * as serverInterfaces from '../interface/interface';
 import { Player } from '../models/Player';
 
 const address = "http://localhost:8080";
-
+const apiInstance = axios.create({
+    baseURL: address,
+    timeout: 1000
+})
 function convertServerPlayerToLocalPlayer(response: serverInterfaces.playerFromServer)
 {
     const player: Player = new Player(response.Uid, response.username, response.bank, response.level);
@@ -16,22 +19,24 @@ function convertServerListToLocalList(response: serverInterfaces.playerListFromS
 
     return playerList;
 }
-export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>>)
+export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null)
 {
-    const {data} = await axios.get(address + '/players');
+    const {data} = await apiInstance.get('/players');
     console.log("Data:");
     console.log(data);
     const playerList = convertServerListToLocalList(data);
     console.log("Converted Data:");
     console.log(playerList);
-    updatePlayerState(playerList);
+
+    if (updatePlayerState != null)
+        updatePlayerState(playerList);
     return playerList;
 }
 
 export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>>, pageNo: number, pageSize: number)
 {
     
-    const {data} = await axios.get(address + '/players/' + pageNo.toString() + '/' + pageSize.toString())
+    const {data} = await apiInstance.get('/players/' + pageNo.toString() + '/' + pageSize.toString())
     console.log("Data:");
     console.log(data);
     let playerList: Player[];
@@ -48,7 +53,7 @@ export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAc
 
 export async function getPlayer(uid: number)
 {
-    const {data} = await axios.get(address + '/players/' + uid.toString())
+    const {data} = await apiInstance.get('/players/' + uid.toString())
     console.log("Data:");
     console.log(data);
     const player = convertServerPlayerToLocalPlayer(data);
@@ -60,7 +65,7 @@ export async function getPlayer(uid: number)
 
 export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
 {
-    const {data} = await axios.get(address + '/players/sort/' + reverse);
+    const {data} = await apiInstance.get('/players/sort/' + reverse);
     console.log("Data:");
     console.log(data);
     const playerList = convertServerListToLocalList(data);
@@ -75,7 +80,7 @@ export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStat
 
 export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
 {
-    const {data} = await axios.get(address + '/players/size');
+    const {data} = await apiInstance.get('/players/size');
     console.log("Data:");
     console.log(data);
     const size: number = data;
@@ -87,3 +92,9 @@ export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetSt
     return size;
     
 }
+
+/*
+export async function newPlayer(player: Player){
+    axios.post
+}
+*/
