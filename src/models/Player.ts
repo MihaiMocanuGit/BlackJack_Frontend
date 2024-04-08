@@ -4,6 +4,7 @@ export class Player {
     private bank: number;
     private level: number;
 
+
     public constructor(uid: number,  username: string, bank: number, level: number) 
     {
         this.uid = uid;
@@ -11,6 +12,7 @@ export class Player {
         this.bank = bank;
         this.level = level;
     }
+
 
     public getUid() : number
     {

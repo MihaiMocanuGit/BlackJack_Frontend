@@ -6,7 +6,6 @@ import { Player } from '../models/Player';
 let result: any;
 function onFullfiled(players: Player[])
 {
-    console.log("ACCEPTED: " + players);
     const levels = new Set<number>();
     const avgBank: number[] = []
     const levelsArr: number[] = [];
@@ -38,7 +37,6 @@ function onFullfiled(players: Player[])
 }
 function onRejected()
 {
-    console.log("REJECTECTEDDDDD");
     result = 
             <BarChart
                 series={ [{}] }

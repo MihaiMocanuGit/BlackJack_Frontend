@@ -37,8 +37,10 @@ export function PrimaryPage()
 
 
     const addPlayer = (username: string, bank:number, level:number) => {
-
-        updatePlayers(basicAdd(players, username, bank, level));
+        console.log("Adding");
+        api.newPlayer(new Player(-1, username, bank, level));
+        api.getPage(updatePlayers, pageNo, pageSize);
+        //updatePlayers(basicAdd(players, username, bank, level));
     };
 
     const removePlayer = (playerUid: number) => {
@@ -60,7 +62,7 @@ export function PrimaryPage()
 
     const getMaxPage = (pageSize: number) => {
         api.getSize(updateSizeList);
-        return Math.floor(sizeList/pageSize);
+        return Math.floor((sizeList-1)/pageSize);
     }
     
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;

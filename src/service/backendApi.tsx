@@ -12,6 +12,15 @@ function convertServerPlayerToLocalPlayer(response: serverInterfaces.playerFromS
     const player: Player = new Player(response.Uid, response.username, response.bank, response.level);
     return player;
 }
+
+function convertLocalPlayerToServerPlayer(player: Player)
+{
+    return {
+            username: player.getUsername(),
+            bank: player.getBank(),
+            level: player.getLevel()
+            }
+}
 function convertServerListToLocalList(response: serverInterfaces.playerListFromServer) {
     const playerList: Player[] = response._embedded.playerList.map((entity: serverInterfaces.playerFromServer) => {
         return convertServerPlayerToLocalPlayer(entity)
@@ -22,11 +31,9 @@ function convertServerListToLocalList(response: serverInterfaces.playerListFromS
 export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null)
 {
     const {data} = await apiInstance.get('/players');
-    console.log("Data:");
-    console.log(data);
+
     const playerList = convertServerListToLocalList(data);
-    console.log("Converted Data:");
-    console.log(playerList);
+
 
     if (updatePlayerState != null)
         updatePlayerState(playerList);
@@ -37,16 +44,14 @@ export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAc
 {
     
     const {data} = await apiInstance.get('/players/' + pageNo.toString() + '/' + pageSize.toString())
-    console.log("Data:");
-    console.log(data);
+
     let playerList: Player[];
     try {
         playerList = convertServerListToLocalList(data);
     } catch(error){
         playerList = [];
     }
-    console.log("Converted Data:");
-    console.log(playerList);
+
     updatePlayerState(playerList);
     return playerList;
 }
@@ -54,11 +59,9 @@ export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAc
 export async function getPlayer(uid: number)
 {
     const {data} = await apiInstance.get('/players/' + uid.toString())
-    console.log("Data:");
-    console.log(data);
+
     const player = convertServerPlayerToLocalPlayer(data);
-    console.log("Converted Data:");
-    console.log(player);
+
     //updatePlayerState(playerList);
     return player;
 }
@@ -66,11 +69,9 @@ export async function getPlayer(uid: number)
 export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
 {
     const {data} = await apiInstance.get('/players/sort/' + reverse);
-    console.log("Data:");
-    console.log(data);
+
     const playerList = convertServerListToLocalList(data);
-    console.log("Converted Data:");
-    console.log(playerList);
+
 
     if (updatePlayerState != null)
         updatePlayerState(playerList);
@@ -81,11 +82,8 @@ export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStat
 export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
 {
     const {data} = await apiInstance.get('/players/size');
-    console.log("Data:");
-    console.log(data);
+
     const size: number = data;
-    console.log("Converted Data:");
-    console.log(size);
 
     updatePlayersSizeState(size);
 
@@ -93,8 +91,7 @@ export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetSt
     
 }
 
-/*
-export async function newPlayer(player: Player){
-    axios.post
+
+export function newPlayer(player: Player){
+    apiInstance.post("/players", convertLocalPlayerToServerPlayer(player));
 }
-*/
