@@ -3,7 +3,7 @@ import * as serverInterfaces from '../interface/interface';
 import { Player } from '../models/Player';
 
 const address = "http://localhost:8080";
-const apiInstance = axios.create({
+const api = axios.create({
     baseURL: address,
     timeout: 1000
 })
@@ -30,13 +30,13 @@ function convertServerListToLocalList(response: serverInterfaces.playerListFromS
 }
 
 export async function status() {
-    const data = await apiInstance.get('/status');
+    const data = await api.get('/status');
     return data;
 }
 
 export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null)
 {
-    const {data} = await apiInstance.get('/players');
+    const {data} = await api.get('/players');
 
     const playerList = convertServerListToLocalList(data);
 
@@ -49,7 +49,7 @@ export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAct
 export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>>, pageNo: number, pageSize: number)
 {
     
-    const {data} = await apiInstance.get('/players/' + pageNo.toString() + '/' + pageSize.toString())
+    const {data} = await api.get('/players/' + pageNo.toString() + '/' + pageSize.toString())
 
     let playerList: Player[];
     try {
@@ -64,7 +64,7 @@ export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAc
 
 export async function getPlayer(uid: number)
 {
-    const {data} = await apiInstance.get('/players/' + uid.toString())
+    const {data} = await api.get('/players/' + uid.toString())
 
     const player = convertServerPlayerToLocalPlayer(data);
 
@@ -74,7 +74,7 @@ export async function getPlayer(uid: number)
 
 export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
 {
-    const {data} = await apiInstance.get('/players/sort/' + reverse);
+    const {data} = await api.get('/players/sort/' + reverse);
 
     const playerList = convertServerListToLocalList(data);
 
@@ -87,7 +87,7 @@ export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStat
 
 export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
 {
-    const {data} = await apiInstance.get('/players/size');
+    const {data} = await api.get('/players/size');
 
     const size: number = data;
 
@@ -99,6 +99,6 @@ export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetSt
 
 
 export function newPlayer(player: Player){
-    apiInstance.post("/players", convertLocalPlayerToServerPlayer(player));
+    api.post("/players", convertLocalPlayerToServerPlayer(player));
 }
 
