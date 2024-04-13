@@ -33,7 +33,7 @@ export function PrimaryPage()
     const {players, updatePlayers} = useContext(DataContext);
     const [sortAscending, updateSortAscending] = useState<boolean>(true);
 
-    const {pageNo, updatePageNo, pageSize, sizeList, updateSizeList } = useContext(PageContext);
+    const {pageNo, updatePageNo, pageSize, listSize, updateListSize } = useContext(PageContext);
 
 
     const addPlayer = (username: string, bank:number, level:number) => {
@@ -61,8 +61,8 @@ export function PrimaryPage()
     }
 
     const getMaxPage = (pageSize: number) => {
-        api.getSize(updateSizeList);
-        return Math.floor((sizeList-1)/pageSize);
+        api.getSize(updateListSize);
+        return Math.floor((listSize - 1)/pageSize);
     }
     
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;

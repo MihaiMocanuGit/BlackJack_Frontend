@@ -28,6 +28,12 @@ function convertServerListToLocalList(response: serverInterfaces.playerListFromS
 
     return playerList;
 }
+
+export async function status() {
+    const data = await apiInstance.get('/status');
+    return data;
+}
+
 export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null)
 {
     const {data} = await apiInstance.get('/players');
@@ -95,3 +101,4 @@ export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetSt
 export function newPlayer(player: Player){
     apiInstance.post("/players", convertLocalPlayerToServerPlayer(player));
 }
+
