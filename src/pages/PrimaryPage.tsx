@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayerList from '../components/PlayerList';
 import { Player } from '../models/Player';
@@ -32,19 +32,37 @@ export function PrimaryPage()
 
     const {players, updatePlayers} = useContext(DataContext);
     const [sortAscending, updateSortAscending] = useState<boolean>(true);
-
+    const [connectionStatus, updateConnectionStatus] = useState<number>(1);
     const {pageNo, updatePageNo, pageSize, listSize, updateListSize } = useContext(PageContext);
 
 
+    const navigate = useNavigate(); 
     const addPlayer = (username: string, bank:number, level:number) => {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+
         api.newPlayer(new Player(-1, username, bank, level));
         api.getPage(updatePlayers, pageNo, pageSize);
         
         //optimistic response
         updatePlayers(basicAdd(players, username, bank, level));
+    
     };
 
     const removePlayer = (playerUid: number) => {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+
         api.deletePlayer(playerUid);
         api.getPage(updatePlayers, pageNo, pageSize);
         
@@ -54,6 +72,14 @@ export function PrimaryPage()
     
     const modifyPlayer = (playerUid: number, username: string, bank:number, level:number) =>
     {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+
         api.replacePlayer(playerUid, new Player(-1, username, bank, level));
         api.getPage(updatePlayers, pageNo, pageSize);
         
@@ -63,12 +89,27 @@ export function PrimaryPage()
 
 
     const sortOnClick = () => {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
         api.getAndSort(null, sortAscending);
         api.getPage(updatePlayers, pageNo, pageSize);
         updateSortAscending(!sortAscending);
     }
 
     const getMaxPage = (pageSize: number) => {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return 0;
+        }
+
         api.getSize(updateListSize);
         if (listSize == 0) return 0;
         return Math.floor((listSize - 1)/pageSize);
@@ -76,13 +117,39 @@ export function PrimaryPage()
     
     PlayersContext = createContext<PlayersContextType>({players, addPlayer, removePlayer, modifyPlayer}) ;
 
-    const navigate = useNavigate(); 
+   
     const joinOnClick = () => {
+        api.status(updateConnectionStatus);
 
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+    
         navigate("/AddPlayerPage");
     }
 
-  
+    const seeGraphOnClick = () => {
+
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+
+        navigate("/GraphsPage")
+    }
+
+    // useEffect(() => {
+    //     if(api.isConnectionBad())
+    //     {
+    //         navigate("/Error");
+    //     }
+    // });
+
 
     return (
         <div style={{backgroundColor:"cyan", padding: "1rem", width: "100%"}} className="App">
@@ -99,7 +166,7 @@ export function PrimaryPage()
                 <>{pageNo} / {getMaxPage(pageSize)}</>
                 <button style={{marginLeft: "25px"}} onClick={() => {updatePageNo((pageNo >= getMaxPage(pageSize))? getMaxPage(pageSize) : pageNo + 1)}}> &gt; </button>
                 <button style={{marginLeft: "250px"}} onClick={() => {sortOnClick()}}> Sort By Level</button>
-                <button style={{marginLeft: "25px"}} onClick={() => {navigate("/GraphsPage")}}> Checkout graphs</button>
+                <button style={{marginLeft: "25px"}} onClick={() => {seeGraphOnClick()}}> Checkout graphs</button>
             </div>
             <div style={{display: 'flex', justifyContent:'stretch'}}>
                 <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}} >

@@ -1,11 +1,12 @@
 import axios from 'axios';
 import * as serverInterfaces from '../interface/interface';
 import { Player } from '../models/Player';
+import { useNavigate } from 'react-router-dom';
 
 const address = "http://localhost:8080";
 const api = axios.create({
     baseURL: address,
-    timeout: 1000
+    timeout: 10000
 })
 function convertServerPlayerToLocalPlayer(response: serverInterfaces.playerFromServer)
 {
@@ -30,13 +31,28 @@ function convertServerListToLocalList(response: serverInterfaces.playerListFromS
     return playerList;
 }
 
-export async function status() {
-    const data = await api.get('/status');
-    return data;
+
+
+
+export async function status(updateStatus: React.Dispatch<React.SetStateAction<number>>) {
+
+    try
+    {
+        const  {data} = await api.get("/status"); 
+        updateStatus(data);
+        return data;
+    }
+    catch(error)
+    {
+        updateStatus(-1);
+        return -1;
+    }
+
 }
 
 export async function getAll(updatePlayerState?: React.Dispatch<React.SetStateAction<Player[]>>)
 {
+    //console.log("Connection Bad: " + isConnectionBad());
     const {data} = await api.get('/players');
 
     const playerList = convertServerListToLocalList(data);
@@ -49,6 +65,7 @@ export async function getAll(updatePlayerState?: React.Dispatch<React.SetStateAc
 
 export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>>, pageNo: number, pageSize: number)
 {
+    //console.log("Connection Bad: " + isConnectionBad());
     
     const {data} = await api.get('/players/' + pageNo.toString() + '/' + pageSize.toString())
 
@@ -65,6 +82,8 @@ export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAc
 
 export async function getPlayer(uid: number)
 {
+    //console.log("Connection Bad: " + isConnectionBad());
+
     const {data} = await api.get('/players/' + uid.toString())
 
     const player = convertServerPlayerToLocalPlayer(data);
@@ -75,6 +94,8 @@ export async function getPlayer(uid: number)
 
 export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
 {
+    //console.log("Connection Bad: " + isConnectionBad());
+
     const {data} = await api.get('/players/sort/' + reverse);
 
     const playerList = convertServerListToLocalList(data);
@@ -88,6 +109,7 @@ export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStat
 
 export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
 {
+    //console.log("Connection Bad: " + isConnectionBad());
     const {data} = await api.get('/players/size');
 
     const size: number = data;
@@ -100,16 +122,21 @@ export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetSt
 
 
 export function newPlayer(player: Player){
+    //console.log("Connection Bad: " + isConnectionBad());
+
     api.post("/players", convertLocalPlayerToServerPlayer(player));
 }
 
 export function deletePlayer(id: number)
 {
+    //isConnectionBad();
     //api.delete("/players", {data: {id: id}});
     api.delete("/players/" + id.toString());
 }
 
 export function replacePlayer(id: number, newPlayer: Player)
 {
+    //console.log("Connection Bad: " + isConnectionBad());
     api.put("/players/" + id.toString(), convertLocalPlayerToServerPlayer(newPlayer));
 }
+

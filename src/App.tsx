@@ -9,6 +9,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Player } from './models/Player';
 import { GraphsPage } from './pages/GraphsPage';
 import * as api from './service/backendApi';
+import { ErrorPage } from './pages/ErrorPage';
 
 export let DataContext: React.Context<{
     players: Player[];
@@ -48,6 +49,7 @@ function App() {
                <Route path='/ViewPlayerPage' element={<ViewPlayerPage />} />
                <Route path='/AddPlayerPage' element={<AddPlayerPage />} />
                <Route path='/GraphsPage' element={<GraphsPage />} />
+               <Route path='/Error' element={<ErrorPage />} />
            </Routes>
         </BrowserRouter>
     );
