@@ -140,3 +140,7 @@ export function replacePlayer(id: number, newPlayer: Player)
     api.put("/players/" + id.toString(), convertLocalPlayerToServerPlayer(newPlayer));
 }
 
+export function fakers()
+{
+    api.post("/fakers");
+}

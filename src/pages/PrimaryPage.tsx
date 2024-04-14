@@ -143,12 +143,29 @@ export function PrimaryPage()
         navigate("/GraphsPage")
     }
 
-    // useEffect(() => {
-    //     if(api.isConnectionBad())
-    //     {
-    //         navigate("/Error");
-    //     }
-    // });
+    const addFakersOnClick = () => {
+
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+
+       api.fakers();
+       api.getPage(updatePlayers, pageNo, pageSize);
+    }
+
+    useEffect(() => {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+    });
 
 
     return (
@@ -167,6 +184,7 @@ export function PrimaryPage()
                 <button style={{marginLeft: "25px"}} onClick={() => {updatePageNo((pageNo >= getMaxPage(pageSize))? getMaxPage(pageSize) : pageNo + 1)}}> &gt; </button>
                 <button style={{marginLeft: "250px"}} onClick={() => {sortOnClick()}}> Sort By Level</button>
                 <button style={{marginLeft: "25px"}} onClick={() => {seeGraphOnClick()}}> Checkout graphs</button>
+                <button style={{marginLeft: "25px"}} onClick={() => {addFakersOnClick()}}> Add 100 fakes</button>
             </div>
             <div style={{display: 'flex', justifyContent:'stretch'}}>
                 <PlayersContext.Provider value={{ players, addPlayer, removePlayer, modifyPlayer}} >
