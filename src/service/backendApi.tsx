@@ -108,3 +108,8 @@ export function deletePlayer(id: number)
     //api.delete("/players", {data: {id: id}});
     api.delete("/players/" + id.toString());
 }
+
+export function replacePlayer(id: number, newPlayer: Player)
+{
+    api.put("/players/" + id.toString(), convertLocalPlayerToServerPlayer(newPlayer));
+}

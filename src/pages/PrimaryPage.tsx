@@ -39,19 +39,26 @@ export function PrimaryPage()
     const addPlayer = (username: string, bank:number, level:number) => {
         api.newPlayer(new Player(-1, username, bank, level));
         api.getPage(updatePlayers, pageNo, pageSize);
-        //updatePlayers(basicAdd(players, username, bank, level));
+        
+        //optimistic response
+        updatePlayers(basicAdd(players, username, bank, level));
     };
 
     const removePlayer = (playerUid: number) => {
         api.deletePlayer(playerUid);
         api.getPage(updatePlayers, pageNo, pageSize);
-        //updatePlayers(basicRemove(players, playerUid));
+        
+        //optimistic response
+        updatePlayers(basicRemove(players, playerUid));
     };
     
     const modifyPlayer = (playerUid: number, username: string, bank:number, level:number) =>
     {
+        api.replacePlayer(playerUid, new Player(-1, username, bank, level));
+        api.getPage(updatePlayers, pageNo, pageSize);
+        
+        //optimistic response
         updatePlayers(basicModify(players, playerUid, username, bank, level));
-
     }
 
 
@@ -63,6 +70,7 @@ export function PrimaryPage()
 
     const getMaxPage = (pageSize: number) => {
         api.getSize(updateListSize);
+        if (listSize == 0) return 0;
         return Math.floor((listSize - 1)/pageSize);
     }
     
