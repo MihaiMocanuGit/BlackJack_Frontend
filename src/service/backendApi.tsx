@@ -34,14 +34,14 @@ export async function status() {
     return data;
 }
 
-export async function getAll(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null)
+export async function getAll(updatePlayerState?: React.Dispatch<React.SetStateAction<Player[]>>)
 {
     const {data} = await api.get('/players');
 
     const playerList = convertServerListToLocalList(data);
 
 
-    if (updatePlayerState != null)
+    if (updatePlayerState)
         updatePlayerState(playerList);
     return playerList;
 }

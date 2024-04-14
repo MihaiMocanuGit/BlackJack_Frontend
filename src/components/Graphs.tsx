@@ -2,8 +2,11 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import * as api from '../service/backendApi'
 import { Player } from '../models/Player';
+import { useActionData } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 let result: any;
+
 function onFullfiled(players: Player[])
 {
     const levels = new Set<number>();
@@ -28,15 +31,17 @@ function onFullfiled(players: Player[])
         avgBank.push(avg);
         levelsArr.push(level);
     }
-    result = <BarChart
+    return (<BarChart
             series={ [{data: avgBank}] }
             height={390}
             xAxis={[{label: 'Average bank per level', data: levelsArr, scaleType: 'band' }]}
             margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
-            />
+            />)
 }
-function onRejected()
+
+const onRejected = () =>
 {
+    console.log("Rejected");
     result = 
             <BarChart
                 series={ [{}] }
@@ -45,9 +50,16 @@ function onRejected()
                 margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
                 />
 }
-export function BarGraph() {
-    const response = api.getAll(null);
-    response.then(onFullfiled, onRejected);
-    return result;
 
+export const BarGraph = () => {
+    const [data, setData] = useState<Player[]>([]);
+    const getPlayers = async () => {
+       const players =  await api.getAll();
+       setData(players);
+    }
+
+    useEffect( () => 
+    {getPlayers()
+    }, [])
+    return onFullfiled(data); 
 }
