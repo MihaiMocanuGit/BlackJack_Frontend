@@ -7,7 +7,7 @@ export interface playerFromServer{
             href: string
         }
     }
-    Uid: number,
+    uid: number,
     username: string,
     bank: number,
     level: number

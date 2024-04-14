@@ -37,14 +37,15 @@ export function PrimaryPage()
 
 
     const addPlayer = (username: string, bank:number, level:number) => {
-        console.log("Adding");
         api.newPlayer(new Player(-1, username, bank, level));
         api.getPage(updatePlayers, pageNo, pageSize);
         //updatePlayers(basicAdd(players, username, bank, level));
     };
 
     const removePlayer = (playerUid: number) => {
-        updatePlayers(basicRemove(players, playerUid));
+        api.deletePlayer(playerUid);
+        api.getPage(updatePlayers, pageNo, pageSize);
+        //updatePlayers(basicRemove(players, playerUid));
     };
     
     const modifyPlayer = (playerUid: number, username: string, bank:number, level:number) =>

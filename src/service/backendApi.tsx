@@ -9,13 +9,14 @@ const api = axios.create({
 })
 function convertServerPlayerToLocalPlayer(response: serverInterfaces.playerFromServer)
 {
-    const player: Player = new Player(response.Uid, response.username, response.bank, response.level);
+    const player: Player = new Player(response.uid, response.username, response.bank, response.level);
     return player;
 }
 
 function convertLocalPlayerToServerPlayer(player: Player)
 {
     return {
+           // uid: player.getUid(),
             username: player.getUsername(),
             bank: player.getBank(),
             level: player.getLevel()
@@ -102,3 +103,8 @@ export function newPlayer(player: Player){
     api.post("/players", convertLocalPlayerToServerPlayer(player));
 }
 
+export function deletePlayer(id: number)
+{
+    //api.delete("/players", {data: {id: id}});
+    api.delete("/players/" + id.toString());
+}
