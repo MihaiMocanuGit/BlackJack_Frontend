@@ -31,25 +31,20 @@ function onFullfiled(players: Player[])
         avgBank.push(avg);
         levelsArr.push(level);
     }
-    return (<BarChart
+
+    if (avgBank.length == 0)
+        return <p>MUI(E)</p>
+    
+    return <BarChart
             series={ [{data: avgBank}] }
             height={390}
             xAxis={[{label: 'Average bank per level', data: levelsArr, scaleType: 'band' }]}
             margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
-            />)
+            />
+  
 }
 
-const onRejected = () =>
-{
-    console.log("Rejected");
-    result = 
-            <BarChart
-                series={ [{}] }
-                height={390}
-                xAxis={[{label: 'Average bank per level', scaleType: 'band' }]}
-                margin={{ top: 30, bottom: 40, left: 30, right: 30 }}
-                />
-}
+
 
 export const BarGraph = () => {
     const [data, setData] = useState<Player[]>([]);
