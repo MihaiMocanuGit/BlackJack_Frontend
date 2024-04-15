@@ -33,7 +33,7 @@ function onFullfiled(players: Player[])
     }
 
     if (avgBank.length == 0)
-        return <p>MUI(E)</p>
+        return <p>MUI</p>
     
     return <BarChart
             series={ [{data: avgBank}] }
