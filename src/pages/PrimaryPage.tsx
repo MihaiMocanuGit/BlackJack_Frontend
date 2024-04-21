@@ -63,7 +63,7 @@ export function PrimaryPage()
             return;
         }
         api.deletePlayer(playerUid);
-        api.getPage(updatePlayers, pageNo, pageSize);
+        //api.getPage(updatePlayers, pageNo, pageSize);
         
     
         //optimistic response
@@ -87,6 +87,7 @@ export function PrimaryPage()
         
         //optimistic response
         updatePlayers(basicModify(players, playerUid, username, bank, level));
+
     }
 
 
@@ -167,6 +168,7 @@ export function PrimaryPage()
             navigate("/Error");
             return;
         }
+        
     });
 
 
