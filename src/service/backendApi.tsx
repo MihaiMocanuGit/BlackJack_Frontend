@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const address = "http://localhost:8080";
 const api = axios.create({
     baseURL: address,
-    timeout: 10000
+    timeout: 60000
 })
 function convertServerPlayerToLocalPlayer(response: serverInterfaces.playerFromServer)
 {
