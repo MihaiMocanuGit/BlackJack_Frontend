@@ -149,5 +149,5 @@ export function replacePlayer(sessionToken: string, id: number, newPlayer: Playe
 
 export function fakers(sessionToken: string)
 {
-    api.post("/fakers", {headers: { Authorization: `Bearer ${sessionToken}` }});
+    api.post("/fakers", {},{headers: { Authorization: `Bearer ${sessionToken}` }});
 }
