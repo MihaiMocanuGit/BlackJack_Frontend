@@ -69,7 +69,7 @@ export function AddPlayerPage()
                     if(inputUsername !== "") 
                     {
                         addFinalPlayer(inputUsername, inputBank, inputLevel);
-                        navigate("/");
+                        navigate("/PrimaryPage");
                     }}}>       
                     Join:
                 </button>

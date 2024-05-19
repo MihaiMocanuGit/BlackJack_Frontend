@@ -2,8 +2,9 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import * as api from '../service/backendApi'
 import { Player } from '../models/Player';
-import { useActionData } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useActionData, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../auth/AuthContext';
 
 let result: any;
 
@@ -48,13 +49,28 @@ function onFullfiled(players: Player[])
 
 export const BarGraph = () => {
     const [data, setData] = useState<Player[]>([]);
+    const { token, loading } = useContext(AuthContext);
+    const navigate = useNavigate();
+    useEffect( () => 
+        {getPlayers()
+        }, [])
+        
+
+    if (loading) {
+        return null;
+    }
+
+    if (!token) {
+            navigate("/login");
+            return;
+    }
+ 
+
     const getPlayers = async () => {
        const players =  await api.getAll(token);
        setData(players);
     }
 
-    useEffect( () => 
-    {getPlayers()
-    }, [])
+
     return onFullfiled(data); 
 }

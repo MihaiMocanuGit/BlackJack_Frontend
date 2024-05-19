@@ -37,8 +37,24 @@ export function PrimaryPage()
     const [sortAscending, updateSortAscending] = useState<boolean>(true);
     const [connectionStatus, updateConnectionStatus] = useState<number>(1);
     const {pageNo, updatePageNo, pageSize, listSize, updateListSize } = useContext(PageContext);
-
     const { token, loading } = useContext(AuthContext);
+    
+    useEffect(() => {
+        api.status(updateConnectionStatus);
+
+        if(connectionStatus != 1)
+        {
+            navigate("/Error");
+            return;
+        }
+
+        const load = () => api.getPage(token, updatePlayers, pageNo, pageSize);
+        load();
+        
+    }, [connectionStatus, navigate, pageNo, pageSize, token, updatePlayers]);
+
+
+    
     if (loading) {
         return null;
     }
@@ -174,16 +190,7 @@ export function PrimaryPage()
        api.getPage(token, updatePlayers, pageNo, pageSize);
     }
 
-    useEffect(() => {
-        api.status(updateConnectionStatus);
 
-        if(connectionStatus != 1)
-        {
-            navigate("/Error");
-            return;
-        }
-        
-    });
 
 
     return (
