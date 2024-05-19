@@ -7,7 +7,13 @@ export const serverAddress = "http://localhost:8080";
 
 const api = axios.create({
     baseURL: serverAddress,
-    timeout: 60000
+    timeout: 60000,
+    withCredentials: false
+    // proxy: {
+    //     protocol: 'https',
+    //     host: 'localhost',
+    //     port: 8080,
+    // }
 })
 function convertServerPlayerToLocalPlayer(response: serverInterfaces.playerFromServer)
 {
@@ -51,10 +57,10 @@ export async function status(updateStatus: React.Dispatch<React.SetStateAction<n
 
 }
 
-export async function getAll(updatePlayerState?: React.Dispatch<React.SetStateAction<Player[]>>)
+export async function getAll(sessionToken: string, updatePlayerState?: React.Dispatch<React.SetStateAction<Player[]>>)
 {
     //console.log("Connection Bad: " + isConnectionBad());
-    const {data} = await api.get('/players');
+    const {data} = await api.get('/players', {headers: { Authorization: `Bearer ${sessionToken}` }});
 
     const playerList = convertServerListToLocalList(data);
 
@@ -64,11 +70,11 @@ export async function getAll(updatePlayerState?: React.Dispatch<React.SetStateAc
     return playerList;
 }
 
-export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>>, pageNo: number, pageSize: number)
+export async function getPage(sessionToken: string, updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>>, pageNo: number, pageSize: number)
 {
     //console.log("Connection Bad: " + isConnectionBad());
     
-    const {data} = await api.get('/players/' + pageNo.toString() + '/' + pageSize.toString())
+    const {data} = await api.get('/players/' + pageNo.toString() + '/' + pageSize.toString(), {headers: { Authorization: `Bearer ${sessionToken}` }})
 
     let playerList: Player[];
     try {
@@ -81,11 +87,11 @@ export async function getPage(updatePlayerState: React.Dispatch<React.SetStateAc
     return playerList;
 }
 
-export async function getPlayer(uid: number)
+export async function getPlayer(sessionToken: string, uid: number)
 {
     //console.log("Connection Bad: " + isConnectionBad());
 
-    const {data} = await api.get('/players/' + uid.toString())
+    const {data} = await api.get('/players/' + uid.toString(), {headers: { Authorization: `Bearer ${sessionToken}` }})
 
     const player = convertServerPlayerToLocalPlayer(data);
 
@@ -93,11 +99,11 @@ export async function getPlayer(uid: number)
     return player;
 }
 
-export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
+export async function getAndSort(sessionToken: string, updatePlayerState: React.Dispatch<React.SetStateAction<Player[]>> | null, reverse: boolean)
 {
     //console.log("Connection Bad: " + isConnectionBad());
 
-    const {data} = await api.get('/players/sort/' + reverse);
+    const {data} = await api.get('/players/sort/' + reverse, {headers: { Authorization: `Bearer ${sessionToken}` }});
 
     const playerList = convertServerListToLocalList(data);
 
@@ -108,10 +114,10 @@ export async function getAndSort(updatePlayerState: React.Dispatch<React.SetStat
     
 }
 
-export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
+export async function getSize(sessionToken: string, updatePlayersSizeState: React.Dispatch<React.SetStateAction<number>>) 
 {
     //console.log("Connection Bad: " + isConnectionBad());
-    const {data} = await api.get('/players/size');
+    const {data} = await api.get('/players/size', {headers: { Authorization: `Bearer ${sessionToken}` }});
 
     const size: number = data;
 
@@ -122,26 +128,26 @@ export async function getSize(updatePlayersSizeState: React.Dispatch<React.SetSt
 }
 
 
-export function newPlayer(player: Player){
+export function newPlayer(sessionToken: string, player: Player){
     //console.log("Connection Bad: " + isConnectionBad());
-
-    api.post("/players", convertLocalPlayerToServerPlayer(player));
+    
+    api.post("/players", convertLocalPlayerToServerPlayer(player), {headers: { Authorization: `Bearer ${sessionToken}` }});
 }
 
-export function deletePlayer(id: number)
+export function deletePlayer(sessionToken: string, id: number)
 {
     //isConnectionBad();
     //api.delete("/players", {data: {id: id}});
-    api.delete("/players/" + id.toString());
+    api.delete("/players/" + id.toString(), {headers: { Authorization: `Bearer ${sessionToken}` }});
 }
 
-export function replacePlayer(id: number, newPlayer: Player)
+export function replacePlayer(sessionToken: string, id: number, newPlayer: Player)
 {
     //console.log("Connection Bad: " + isConnectionBad());
-    api.put("/players/" + id.toString(), convertLocalPlayerToServerPlayer(newPlayer));
+    api.put("/players/" + id.toString(), convertLocalPlayerToServerPlayer(newPlayer), {headers: { Authorization: `Bearer ${sessionToken}` }});
 }
 
-export function fakers()
+export function fakers(sessionToken: string)
 {
-    api.post("/fakers");
+    api.post("/fakers", {headers: { Authorization: `Bearer ${sessionToken}` }});
 }

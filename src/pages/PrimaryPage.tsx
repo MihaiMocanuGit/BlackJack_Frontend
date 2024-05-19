@@ -32,6 +32,12 @@ export function PrimaryPage()
     document.title = 'Main page';
     const navigate = useNavigate(); 
 
+  
+    const {players, updatePlayers} = useContext(DataContext);
+    const [sortAscending, updateSortAscending] = useState<boolean>(true);
+    const [connectionStatus, updateConnectionStatus] = useState<number>(1);
+    const {pageNo, updatePageNo, pageSize, listSize, updateListSize } = useContext(PageContext);
+
     const { token, loading } = useContext(AuthContext);
     if (loading) {
         return null;
@@ -41,10 +47,7 @@ export function PrimaryPage()
             navigate("/login");
             return;
     }
-    const {players, updatePlayers} = useContext(DataContext);
-    const [sortAscending, updateSortAscending] = useState<boolean>(true);
-    const [connectionStatus, updateConnectionStatus] = useState<number>(1);
-    const {pageNo, updatePageNo, pageSize, listSize, updateListSize } = useContext(PageContext);
+
 
 
    
@@ -57,8 +60,8 @@ export function PrimaryPage()
             return;
         }
 
-        api.newPlayer(new Player(-1, username, bank, level));
-        api.getPage(updatePlayers, pageNo, pageSize);
+        api.newPlayer(token, new Player(-1, username, bank, level));
+        api.getPage(token, updatePlayers, pageNo, pageSize);
         
         //optimistic response
         updatePlayers(basicAdd(players, username, bank, level));
@@ -73,7 +76,7 @@ export function PrimaryPage()
             navigate("/Error");
             return;
         }
-        api.deletePlayer(playerUid);
+        api.deletePlayer(token, playerUid);
         //api.getPage(updatePlayers, pageNo, pageSize);
         
     
@@ -91,8 +94,8 @@ export function PrimaryPage()
             return;
         }
 
-        api.replacePlayer(playerUid, new Player(-1, username, bank, level));
-        api.getPage(updatePlayers, pageNo, pageSize);
+        api.replacePlayer(token, playerUid, new Player(-1, username, bank, level));
+        api.getPage(token, updatePlayers, pageNo, pageSize);
 
         
         
@@ -110,8 +113,8 @@ export function PrimaryPage()
             navigate("/Error");
             return;
         }
-        api.getAndSort(null, sortAscending);
-        api.getPage(updatePlayers, pageNo, pageSize);
+        api.getAndSort(token, null, sortAscending);
+        api.getPage(token, updatePlayers, pageNo, pageSize);
         updateSortAscending(!sortAscending);
     }
 
@@ -124,7 +127,7 @@ export function PrimaryPage()
             return 0;
         }
 
-        api.getSize(updateListSize);
+        api.getSize(token, updateListSize);
         if (listSize == 0) return 0;
         return Math.floor((listSize - 1)/pageSize);
     }
@@ -167,8 +170,8 @@ export function PrimaryPage()
             return;
         }
 
-       api.fakers();
-       api.getPage(updatePlayers, pageNo, pageSize);
+       api.fakers(token);
+       api.getPage(token, updatePlayers, pageNo, pageSize);
     }
 
     useEffect(() => {

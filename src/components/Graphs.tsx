@@ -49,7 +49,7 @@ function onFullfiled(players: Player[])
 export const BarGraph = () => {
     const [data, setData] = useState<Player[]>([]);
     const getPlayers = async () => {
-       const players =  await api.getAll();
+       const players =  await api.getAll(token);
        setData(players);
     }
 

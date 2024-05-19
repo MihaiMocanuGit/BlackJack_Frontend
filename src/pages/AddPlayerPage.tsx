@@ -3,14 +3,27 @@ import { useState } from 'react';
 import { useNavigate} from "react-router-dom";
 import { PlayersContext } from './PrimaryPage'
 import { PlayersContextType } from './PrimaryPage'
+import { AuthContext } from '../auth/AuthContext';
 
 export function AddPlayerPage()
 {
+    
     const {addPlayer} = useContext<PlayersContextType>(PlayersContext)
+    const navigate = useNavigate();
 
+    
     const [inputUsername, updateUsernameInput] = useState<string>("");
     const [inputBank, updateBankInput] = useState<number>(0);
     const [inputLevel, updateLevelInput] = useState<number>(0);
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+        return null;
+    }
+
+    if (!token) {
+            navigate("/login");
+            return;
+    }
 
     const addFinalPlayer = (username: string, bank:number, level:number) => {
         addPlayer(username, bank, level);
@@ -19,7 +32,7 @@ export function AddPlayerPage()
         updateLevelInput(0);
         updateBankInput(0);
     };
-    const navigate = useNavigate(); 
+
     return (
         <div style={{backgroundColor:"cyan", padding: "1rem", minWidth: "10%", minHeight: "10%", maxWidth: "60%", maxHeight: "50%"}} className="App">
                 <div className='header'>
