@@ -4,12 +4,12 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true); // <-- Add a loading state
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
-    setLoading(false); 
+    setLoading(false); // Mark loading as complete after setting the token
   }, []);
 
   return (

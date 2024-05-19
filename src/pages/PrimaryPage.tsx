@@ -8,7 +8,7 @@ import { DataContext } from '../App';
 import { PageContext } from '../App';
 import { basicAdd, basicRemove, basicModify } from '../utils/CrudOperations';
 import * as api from '../service/backendApi'
-
+import { AuthContext } from "../auth/AuthContext";
 
 export type PlayersContextType = {
 
@@ -28,15 +28,26 @@ export let PlayersContext = createContext<PlayersContextType>({
 
 export function PrimaryPage()
 {
-    document.title = 'Primary';
 
+    document.title = 'Main page';
+    const navigate = useNavigate(); 
+
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+        return null;
+    }
+
+    if (!token) {
+            navigate("/login");
+            return;
+    }
     const {players, updatePlayers} = useContext(DataContext);
     const [sortAscending, updateSortAscending] = useState<boolean>(true);
     const [connectionStatus, updateConnectionStatus] = useState<number>(1);
     const {pageNo, updatePageNo, pageSize, listSize, updateListSize } = useContext(PageContext);
 
 
-    const navigate = useNavigate(); 
+   
     const addPlayer = (username: string, bank:number, level:number) => {
         api.status(updateConnectionStatus);
 

@@ -4,6 +4,7 @@ import { Player } from '../models/Player';
 import { useNavigate } from 'react-router-dom';
 
 export const serverAddress = "http://localhost:8080";
+
 const api = axios.create({
     baseURL: serverAddress,
     timeout: 60000

@@ -2,11 +2,11 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
-import serverAddress from '../service/backendApi'
+import { serverAddress } from '../service/backendApi'
 
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
   const { setToken } = useContext(AuthContext);
@@ -15,21 +15,22 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(serverAddress + "/auth/login", {
-        username,
+        email: email,
         password,
       });
       setToken(response.data.token);
       localStorage.setItem("token", response.data.token);
-      navigate("/dashboard");
+      navigate("/PrimaryPage");
     } catch (error) {
       console.error("Authentication failed:", error);
       setToken(null);
       localStorage.removeItem("token");
-      if (error.response && error.response.data) {
-        setErrorMessage(error.response.data); // Set the error message if present in the error response
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
+      // if (error.response && error.response.data) {
+      //   setErrorMessage(error.response.data); // Set the error message if present in the error response
+      // } else {
+      //   setErrorMessage("An unexpected error occurred. Please try again.");
+      // }
+      setErrorMessage("Could not login! Check credentials.");
     }
   };
 
@@ -38,9 +39,9 @@ const Login = () => {
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
       <form onSubmit={handleSubmit}>
         <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
         />
         <input
           type="password"
@@ -50,6 +51,7 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <button style={{marginLeft: "25px"}} onClick={() => {navigate("/register")()}}>  Register Instead</button>
     </div>
   );
 };

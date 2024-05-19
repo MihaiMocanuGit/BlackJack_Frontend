@@ -4,8 +4,15 @@ import { PrimaryPage } from './pages/PrimaryPage';
 import { ViewPlayerPage } from './pages/ViewPlayerPage';
 import { AddPlayerPage } from './pages/AddPlayerPage';
 
+import Login from "./auth/Login"
+import Logout from "./auth/Logout";
+import Registration from "./auth/Registration";
+import Dashboard from "./auth/Dashboard";
+import { AuthProvider } from "./auth/AuthContext";
+
+
 import  React, { createContext, useEffect, useState} from 'react'
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import { Player } from './models/Player';
 import { GraphsPage } from './pages/GraphsPage';
 import * as api from './service/backendApi';
@@ -35,22 +42,29 @@ function App() {
     PageContext = createContext({pageNo,updatePageNo, pageSize, updatePageSize, listSize, updateListSize});
 
     
-    useEffect(() => {
-        console.log("Loading players...")
-        const load = () => api.getPage(updatePlayers, pageNo, pageSize);
-        load();
-      }, [pageNo, pageSize])
+    // useEffect(() => {
+    //     console.log("Loading players...")
+    //     const load = () => api.getPage(updatePlayers, pageNo, pageSize);
+    //     load();
+    //   }, [pageNo, pageSize])
 
 
     return (
         <BrowserRouter>
-           <Routes>
-               <Route path='/' element={<PrimaryPage />} />
-               <Route path='/ViewPlayerPage' element={<ViewPlayerPage />} />
-               <Route path='/AddPlayerPage' element={<AddPlayerPage />} />
-               <Route path='/GraphsPage' element={<GraphsPage />} />
-               <Route path='/Error' element={<ErrorPage />} />
-           </Routes>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/logout" element={<Logout />} />
+                    <Route path="/register" element={<Registration />} />{" "}
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="*" element={<Navigate to="/login" replace />} />
+                    <Route path='/PrimaryPage' element={<PrimaryPage />} /> 
+                    <Route path='/ViewPlayerPage' element={<ViewPlayerPage />} />
+                    <Route path='/AddPlayerPage' element={<AddPlayerPage />} />
+                    <Route path='/GraphsPage' element={<GraphsPage />} />
+                    <Route path='/Error' element={<ErrorPage />} />
+                </Routes>
+            </AuthProvider>
         </BrowserRouter>
     );
 }
